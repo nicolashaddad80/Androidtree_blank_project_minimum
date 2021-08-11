@@ -1,0 +1,34 @@
+genrule {
+    name: "boschradargittags",
+    srcs: [".git/"],
+    out: ["BuildConfig.java"],
+    cmd: "$(location) " + " $(out)",
+    tool_files: ["scripts/gittags.sh", ],
+}
+
+java_defaults {
+    name: "BoschRadarAppDefaults",
+    srcs: [
+        "app/src/main/**/*.kt",
+        "core/src/main/**/*.kt",
+        ":boschradargittags",
+    ],
+    manifest: "app/src/main/AndroidManifest.xml",
+    resource_dirs: ["app/src/main/res"],    
+    static_libs: [
+        "androidx.annotation_annotation",
+    ],
+
+    certificate: "platform",
+    product_specific: true,
+    optimize: {
+        enabled: true,
+        shrink: true,
+        optimize: true,
+    }
+}
+
+android_app {
+    name: "BoschRadar",
+    defaults: ["BoschRadarAppDefaults"],
+}
