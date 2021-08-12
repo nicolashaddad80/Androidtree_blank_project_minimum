@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020 and later Renault S.A.S. / Nissan Motor Company, Limited
+  ~ Developed by Renault S.A.S. / Nissan Motor Company, Limited and affiliates
+  ~ which hold all intellectual property rights. Use of this software is subject
+  ~ to a specific license granted by RENAULT S.A.S. / Nissan Motor Company, Limited.
+  -->
+
+<lint>
+    <issue id="ProtectedPermissions" severity="ignore" />
+    <issue id="GoogleAppIndexingWarning" severity="ignore" />
+    <issue id="PrivateApi" severity="error">
+        <ignore regexp="SystemProperties" />
+    </issue>
+    <issue id="GradleDependency" severity="informational" />
+    <issue id="OldTargetApi" severity="ignore" />
+</lint>

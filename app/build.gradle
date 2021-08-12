@@ -1,0 +1,84 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+apply from: '../ktlint.gradle'
+apply from: '../detekt.gradle'
+
+// method to read project version from "version.txt" file
+ext.getBoschRadarVersion = {
+    rootProject.file('version.txt').text.trim()
+}
+
+android {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        applicationId "com.renault.car.boschradar"
+        minSdkVersion 29
+        targetSdkVersion 29
+        versionCode 1
+        versionName "rel_" + getBoschRadarVersion() + "_git_" + androidGitVersion.name()
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-rules.pro'
+            debuggable false
+        }
+        debug {
+            testCoverageEnabled = true
+//            signingConfig signingConfigs.config
+            debuggable true
+        }
+    }
+
+    // Add lint.xml configuration
+    lintOptions {
+        lintConfig file('lint.xml')
+        warningsAsErrors true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'thirdpartynotice.txt'
+    }
+
+}
+
+// Test Logging
+// This allows to log unit test execution and logs (from println or logger in test)
+// Important! need to run gradle clean test, gradle test won't display logs
+tasks.withType(Test) {
+    testLogging {
+        events "standardOut", "started", "passed", "skipped", "failed"
+    }
+}
+
+task gitInfo {
+    println("Android GIT version name: [" + androidGitVersion.name() + "]")
+    println("Android GIT version code: [" + androidGitVersion.code() + "]")
+    println("BoschRadar version code: [" + getBoschRadarVersion() + "]")
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
